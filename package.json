@@ -1,0 +1,22 @@
+{
+  "name": "angular-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anasceym/angular-playground.git"
+  },
+  "author": "anasceym",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anasceym/angular-playground/issues"
+  },
+  "homepage": "https://github.com/anasceym/angular-playground",
+  "dependencies": {
+    "angular": "^1.4.9"
+  }
+}
