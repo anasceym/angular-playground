@@ -9,7 +9,8 @@ var gulp = require('gulp'),
     path = require('path'),
     webserver = require('gulp-webserver'),
     browserify = require('browserify'),
-    source = require('vinyl-source-stream');
+    source = require('vinyl-source-stream')
+    partialify = require('partialify');
 
 var config = {
     lessPath: path.join('resources', 'less'),
@@ -62,25 +63,22 @@ gulp.task('build-css', ['bower', 'icons', 'css']);
  ];
 
 gulp.task('browserify', function() {
-    // Grabs the app.js file
     return browserify(path.join('.','app','main.js'))
-        // bundles it and creates a file called main.js
+        .transform(partialify)
         .bundle()
         .pipe(source('main.js'))
-        // saves it the public/js/ directory
         .pipe(gulp.dest(path.join('.', 'resources', 'js')));
 })
 
-gulp.task('js', ['browserify'], function() {
+gulp.task('build-js', ['browserify'], function() {
     gulp.src(jsPaths)
       .pipe(concat('application.js'))
       .pipe(gulp.dest(path.join('.','public','js')))
 });
 
-// Rerun the task when a file changes
 gulp.task('watch', function() {
     gulp.watch(path.join(config.lessPath, '**', '*.less'), ['css']);
-    gulp.watch(path.join(config.appPath, '**', '*.js'), ['js']);
+    gulp.watch(path.join(config.appPath, '**', '*.js'), ['build-js']);
 });
 
 gulp.task('connect', function () {
@@ -93,3 +91,5 @@ gulp.task('connect', function () {
 })
 
 gulp.task('dev', ['watch', 'connect']);
+gulp.task('setup', ['build-css', 'build-js']);
+gulp.task('run', ['connect']);

@@ -1,7 +1,6 @@
 require('angular')
 
-var app = angular.module('app', [])
 
-app.controller('MainController', function($scope) {
-    $scope.message = 'Angular Works!'
-}) 
+var app = angular
+			.module('app', [require('angular-route')])
+			.config(require('./router.js'));
