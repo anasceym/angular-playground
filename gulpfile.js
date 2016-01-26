@@ -58,7 +58,7 @@ gulp.task('build-css', ['bower', 'icons', 'css']);
  var jsPaths = [
     path.join(config.bowerDir, 'jquery', 'dist', 'jquery.js'),
     path.join(config.bowerDir, 'bootstrap', 'dist', 'js', 'bootstrap.js'),
-    path.join(config.appPath, 'built', 'main.js')
+    path.join('.', 'resources', 'js', 'main.js')
  ];
 
 gulp.task('browserify', function() {
@@ -68,7 +68,7 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source('main.js'))
         // saves it the public/js/ directory
-        .pipe(gulp.dest(path.join(config.appPath,'built')));
+        .pipe(gulp.dest(path.join('.', 'resources', 'js')));
 })
 
 gulp.task('js', ['browserify'], function() {

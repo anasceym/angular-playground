@@ -12200,7 +12200,7 @@ require('angular')
 var app = angular.module('app', [])
 
 app.controller('MainController', function($scope) {
-    $scope.message = 'Angular Works2!'
+    $scope.message = 'Angular Works!'
 }) 
 },{"angular":3}],2:[function(require,module,exports){
 /**
