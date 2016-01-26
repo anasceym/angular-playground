@@ -5,8 +5,9 @@ var gulp = require('gulp'),
     cssnano = require('gulp-cssnano'),
     notify = require("gulp-notify"),
     bower = require('gulp-bower'),
+    concat = require('gulp-concat'),
     path = require('path'),
-    connect = require('gulp-connect'),
+    webserver = require('gulp-webserver'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream');
 
@@ -35,11 +36,12 @@ gulp.task('icons', function() {
 });
 
 gulp.task('css', function() {
-    gulp.src(path.join('resources','less','style.less'))
+    gulp.src(path.join('resources','less','application.less'))
         .pipe(sourcemaps.init())
         .pipe(less({
             paths: [
-                path.join(config.bowerDir, 'bootstrap', 'less')
+                path.join(config.bowerDir, 'bootstrap', 'less'),
+                path.join(config.bowerDir, 'fontawesome', 'less')
             ]
         }))
         .pipe(autoprefixer())
@@ -48,21 +50,16 @@ gulp.task('css', function() {
         .pipe(gulp.dest(path.join('public','css')));
 });
 
-// Rerun the task when a file changes
-gulp.task('watch', function() {
-    gulp.watch(path.join(config.lessPath, '**', '*.less'), ['css']);
-    gulp.watch(path.join(config.appPath, '**', '*.js'), ['browserify']);
-});
+gulp.task('build-css', ['bower', 'icons', 'css']);
 
 /**
  * JS Tasks
  */
-gulp.task('connect', function () {
-    connect.server({
-        root: 'public',
-        port: 4000
-    })
-})
+ var jsPaths = [
+    path.join(config.bowerDir, 'jquery', 'dist', 'jquery.js'),
+    path.join(config.bowerDir, 'bootstrap', 'dist', 'js', 'bootstrap.js'),
+    path.join(config.appPath, 'built', 'main.js')
+ ];
 
 gulp.task('browserify', function() {
     // Grabs the app.js file
@@ -71,6 +68,28 @@ gulp.task('browserify', function() {
         .bundle()
         .pipe(source('main.js'))
         // saves it the public/js/ directory
-        .pipe(gulp.dest(path.join('.','public','js')));
+        .pipe(gulp.dest(path.join(config.appPath,'built')));
 })
-// gulp.task('default', ['bower', 'icons', 'css']);
+
+gulp.task('js', ['browserify'], function() {
+    gulp.src(jsPaths)
+      .pipe(concat('application.js'))
+      .pipe(gulp.dest(path.join('.','public','js')))
+});
+
+// Rerun the task when a file changes
+gulp.task('watch', function() {
+    gulp.watch(path.join(config.lessPath, '**', '*.less'), ['css']);
+    gulp.watch(path.join(config.appPath, '**', '*.js'), ['js']);
+});
+
+gulp.task('connect', function () {
+    gulp.src('public')
+        .pipe(webserver({
+            livereload: false,
+            directoryListing: false,
+            open: "http://localhost:8000/index.html"
+        }));
+})
+
+gulp.task('dev', ['watch', 'connect']);

@@ -5,7 +5,7 @@ var app = angular.module('app', [])
 
 app.controller('MainController', function($scope) {
     $scope.message = 'Angular Works2!'
-})
+}) 
 },{"angular":3}],2:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.9
