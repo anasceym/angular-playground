@@ -6,4 +6,8 @@ First time exploring Angular, it is quite complex compared to Vue.js. In my pers
 
 To explore this repo:
 
-run 
+1. `gulp setup` to build css and js for the first time
+2. `gulp run` to setup a webserver. View the app at `http://localhost:8000
+
+To develop
+1. `gulp dev` will watch files changes and run a webserver
